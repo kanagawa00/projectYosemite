@@ -4,8 +4,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 import time
-waseda_username="tsh"
-keypass="Aragaki01!"
+waseda_username="######"
+keypass="#######"
 search_keyword="GMO"
 #早稲田検索ページを開ける
 browser = webdriver.Chrome()
