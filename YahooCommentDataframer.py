@@ -89,6 +89,6 @@ for cmt in comments:
         #print([num_c,cmt])
         cmtlist.append([num_c,cmt])
 
-#用两个list构建dataframe
+#用cmtlist构建dataframe
 df = pd.DataFrame(cmtlist,columns=["母(0)/子(1)","评论内容"])
 print(df)
