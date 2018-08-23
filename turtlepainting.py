@@ -50,5 +50,18 @@ def circle_arc(t,r):
 
 arc(turtle,475,30)
 
+def draw(t,length,n):
+    if n==0:
+        turtle.done()
+        return
+    angle=50
+    t.fd(length*n)
+    t.lt(angle)
+    draw(t,length,n-1)
+    t.rt(2*angle)
+
+draw(turtle,6,27)
+
+
     
 turtle.done()
