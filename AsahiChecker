@@ -5,8 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 import time
 import pandas as pd
-#waseda_username="#######"
-#keypass="#######"
+waseda_username="######"
+keypass="#######"
 search_keyword="GMO"
 #早稲田検索ページを開ける
 browser = webdriver.Chrome()
@@ -52,10 +52,10 @@ def newsdownload(nl):
         datelist.append(str(numlist[i*2].text+numlist[i*2+1].text))
     for date,ttl,news in zip(datelist,ttllist,newslist):
         nl.append([date,ttl.text,news.text])
-        #print(date)
-        #print(ttl.text)
-        #print(news.text)
-        #print("■■■■■■■■■■■■■■■■■■")
+        print("<h1>",date,"</h1>")
+        print("<h2>",ttl.text,"</h2")
+        print(news.text)
+        print("■■■■■■■■■■■■■■■■■■")
     time.sleep(2)
     browser.find_element_by_xpath('//img[@alt="検索一覧画面へ戻る"]').click()
     time.sleep(1)
@@ -74,7 +74,35 @@ while w_start<=w_page:
     newsdownload(articles)
     w_start+=1
 
-browser.close()
+#browser.close()
+browser.quit()
 #データフレーム構築
 df = pd.DataFrame(articles,columns=["時間","タイトル","記事"])
 print(df)
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+#data=pd.read_csv("最終課題.csv",encoding="utf-8", sep="\t",engine="python",usecols=[0])
+#content=pd.read_csv("最終課題.csv",encoding="utf-8", sep="\t",engine="python",usecols=[2])
+#content.to_csv("最終課題（コンテンツ）.txt",encoding="utf-8",index=False)
+#data=pd.read_csv("最終課題.csv",encoding="utf-8", sep="\t",engine="python")
+#print(data["1.Date"])
+x=[]
+y=[]
+for n in range(1988,2019):
+    year=df["時間"].str.startswith(str(n)).sum()
+    x.append(n)
+    y.append(year)
+    #print(n,"年：",year,"件")
+###########################################################
+plt.figure(figsize=(10,4))
+plt.plot(x,y,color="red", linewidth=3.0, linestyle="--")
+plt.xticks(fontsize=15)
+plt.yticks(fontsize=15) 
+font ={"family":"SimHei","weight":"normal","size":15}
+plt.title("図1",font)
+plt.xlabel("年",font)
+plt.ylabel("件数",font)
+plt.show()
+##########################################################
