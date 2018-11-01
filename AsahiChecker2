@@ -6,12 +6,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.ui import Select
 import time
 import pandas as pd
-waseda_username="########"
-keypass="########"
+waseda_username="#######"
+keypass="#######"
 #search_keyword="もう一つの祖国　戦後７０年"
-keywordlist=["ワーキングママ+ワーキング母+ワーママ+ワーキングマザー+働くママ+働く母"]
+#keywordlist=["(ワーキングママ+ワーキング母+ワーママ+ワーキングマザー+働くママ+働く母)&(子ども+子育て+保育+育児+ＰＴＡ+児童+保育園+出産+育休+子供+主婦+家事+職場+改革+キャリア+妊娠+共働き+結婚+産む+赤ちゃん)"]
+keywordlist=["尖閣諸島&国有"]
 articles=[]
-f=open("AsahiCheck2.txt","w",encoding="utf-8")
+f=open("Li_AsahiCheck2国有.txt","w",encoding="utf-8")
 
 #一覧表示&テキストスクレイピングのプログラム
 def newsdownload(browser,nl):
@@ -19,26 +20,47 @@ def newsdownload(browser,nl):
     browser.find_element_by_xpath('//input[@name="btnDetail"]').click()
     numlist=browser.find_elements_by_xpath('//td[@class="topic-list"]//nobr') #掲載日
     arealist=browser.find_elements_by_xpath('//td[@class="topic-list"and@align="center"]') #掲載日
+    time.sleep(1)
     ttllist=browser.find_elements_by_class_name("font002")
-    newslist=browser.find_elements_by_class_name("detail001")
+    
+    #newslist=browser.find_elements_by_class_name("detail001")
+    allnewslist=browser.find_elements_by_xpath('//table[@class="topic-detail"]/tbody/tr/td')
+    newslist=[]
+    for c in range(int(len(allnewslist)/3)):
+        newslist.append(allnewslist[c*3+2])
+    
+    time.sleep(1)
 
     datelist=[]
     for i in range(int(len(numlist)/2)):
         datelist.append(str(numlist[i*2].text+numlist[i*2+1].text))
 
-    daylist,menlist,pagelist,lenlist=[],[],[],[]
+    nolist,daylist,menlist,pagelist,lenlist=[],[],[],[],[]
     for k in range(int(len(arealist)/6)):
+        nolist.append(arealist[k*6].text)
         daylist.append(arealist[k*6+2].text)
         menlist.append(arealist[k*6+3].text)
         pagelist.append(arealist[k*6+4].text)
         lenlist.append(arealist[k*6+5].text)
-        
-    for date,ttl,news,day,men,page,size in zip(datelist,ttllist,newslist,daylist,menlist,pagelist,lenlist):
-        nl.append([date,ttl.text,day,men,page,size])
-        f.write("<H1>"+date+"</H1>"+"\n")
-        f.write("<H2>"+ttl.text+"</H2>"+"\n")
-        f.write("\n"+news.text+"\n\n\n")
-        #print("■■■■■■■■■■■■■■■■■■")
+    
+    print("ttlist size:",len(ttllist))
+    print("menlist size:",len(menlist))
+    print("nolist size:",len(nolist))
+    print("datelist size:",len(datelist))
+    print("newslist size:",len(newslist))
+    print("daylist size:",len(daylist))
+    print("pagelist size:",len(pagelist))
+    print("lenlist size:",len(lenlist))
+    
+    for no,date,ttl,news,day,men,page,size in zip(nolist,datelist,ttllist,newslist,daylist,menlist,pagelist,lenlist):
+        if news.text.startswith("※著作権などの関係で本文を表示できません。"):
+            pass
+        else:
+            nl.append([no,date,ttl.text,day,men,page,size])
+            f.write("<H1>"+date+"</H1>"+"\n")
+            f.write("<H2>"+ttl.text+"</H2>"+"\n")
+            f.write("\n"+news.text+"\n\n\n")
+            #print("■■■■■■■■■■■■■■■■■■")
     time.sleep(2)
     browser.find_element_by_xpath('//img[@alt="検索一覧画面へ戻る"]').click()
     time.sleep(1)
@@ -59,11 +81,12 @@ def getpage(browser,search_keyword,newsdata):
     for handle in allHandles:
         if browser.title.find("EZproxy") == -1:
             browser.switch_to_window(handle)
-    elem_user = browser.find_element_by_name("user")
-    elem_user.send_keys(waseda_username)
-    elem_pwd = browser.find_element_by_name("pass")
-    elem_pwd.send_keys(keypass)
-    browser.find_element_by_xpath('//*[@type="submit"]').click()
+    
+    #elem_user = browser.find_element_by_name("user")
+    #elem_user.send_keys(waseda_username)
+    #elem_pwd = browser.find_element_by_name("pass")
+    #elem_pwd.send_keys(keypass)
+    #browser.find_element_by_xpath('//*[@type="submit"]').click()
     time.sleep(2)
     browser.find_element_by_xpath('//*[@alt="ログイン（Login）へ"]').click()
     time.sleep(3)
@@ -75,21 +98,21 @@ def getpage(browser,search_keyword,newsdata):
     elem_inkw = browser.find_element_by_name("txtWord")
     elem_inkw.send_keys(search_keyword)
     
-    browser.find_element_by_xpath('//input[@id="rdoSrchMode2"]').click()
+    browser.find_element_by_xpath('//input[@id="rdoSrchMode2"]').click() #詳細検索
     #browser.find_element_by_xpath('//input[@id="rdoSrchItem3"]').click() #見出しだけ検索
     browser.find_element_by_xpath('//input[@id="chkHochi2"]').click() #地方紙
     browser.find_element_by_xpath('//input[@id="chkIssueS2"]').click()
     browser.find_element_by_xpath('//input[@id="chkIssueS3"]').click()
     browser.find_element_by_xpath('//input[@id="chkIssueS4"]').click()
     browser.find_element_by_xpath('//input[@id="chkIssueS5"]').click()
+    Select(browser.find_element_by_name("cmbDspNum")).select_by_value("100") 
 
-    Select(browser.find_element_by_name("cmbIDFy")).select_by_value("1986") 
-    Select(browser.find_element_by_name("cmbIDFm")).select_by_value("04") 
-    Select(browser.find_element_by_name("cmbIDFd")).select_by_value("01")
-    Select(browser.find_element_by_name("cmbIDTy")).select_by_value("2017") 
+    Select(browser.find_element_by_name("cmbIDFy")).select_by_value("2010") 
+    Select(browser.find_element_by_name("cmbIDFm")).select_by_value("09") 
+    Select(browser.find_element_by_name("cmbIDFd")).select_by_value("07")
+    Select(browser.find_element_by_name("cmbIDTy")).select_by_value("2012") 
     Select(browser.find_element_by_name("cmbIDTm")).select_by_value("12") 
     Select(browser.find_element_by_name("cmbIDTd")).select_by_value("31")
-    
 
     time.sleep(1)
     browser.find_element_by_xpath('//input[@value="検索実行"]').click()
@@ -97,7 +120,7 @@ def getpage(browser,search_keyword,newsdata):
     #ページの切り替え
     w_start=1
     w_news=browser.find_element_by_xpath('//*[@class="fontcolor001"]')
-    w_page=int(w_news.text)//20+1
+    w_page=int(w_news.text)//100+1
     while w_start<=w_page:
         newsdownload(browser,newsdata)
         w_start+=1
@@ -112,7 +135,7 @@ browser.quit()
 f.close()
        
 #データフレーム構築
-df = pd.DataFrame(articles,columns=["時間","タイトル","朝夕刊","面","ページ","文字数"])
-df.to_csv("AsahiCheck2.csv",encoding="utf-8",sep="\t", index=False)
+df = pd.DataFrame(articles,columns=["No","時間","タイトル","朝夕刊","面","ページ","文字数"])
+df.to_csv("Li_AsahiCheck2国有.csv",encoding="utf-8",sep="\t", index=False)
 df
 
