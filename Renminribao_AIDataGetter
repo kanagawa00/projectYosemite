@@ -22,8 +22,8 @@ def gakugai(browser,un,pw):
     time.sleep(1)
     browser.switch_to_window(browser.window_handles[1])
     browser.get("http://data.people.com.cn.ez.wul.waseda.ac.jp/rmrb")
-user="tsh"
-password="Aragaki01!"
+user="######"
+password="######"
 gakugai(browser,user,password)
 ################################################
 #時期限定検索
