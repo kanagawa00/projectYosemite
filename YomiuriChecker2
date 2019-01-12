@@ -80,19 +80,19 @@ def getpage(browser,search_keyword,newsdata):
     browser.find_element_by_xpath('//*[@value="100"]').click() #100件表示
 
     browser.find_element_by_class_name("choiceArea1Open").click()  #個別に選択する
-    browser.find_element_by_xpath('//*[@title="全国版"]').click()　#全国版
-    browser.find_element_by_xpath('//*[@title="地域版"]').click()　#地域版
+    browser.find_element_by_xpath(u'//*[@title="全国版"]').click() #全国版
+    browser.find_element_by_xpath(u'//*[@title="地域版"]').click() #地域版
     
     #各地域版を個別に選択する
-    browser.find_element_by_xpath('//*[@title="各地域版を個別に選択する"]').click()
+    browser.find_element_by_xpath(u'//*[@title="各地域版を個別に選択する"]').click()
     ##関東
-    browser.find_element_by_xpath('//*[@title="茨城"]').click()
-    browser.find_element_by_xpath('//*[@title="栃木"]').click()
-    browser.find_element_by_xpath('//*[@title="群馬"]').click()
-    browser.find_element_by_xpath('//*[@title="埼玉"]').click()
-    browser.find_element_by_xpath('//*[@title="千葉"]').click()
-    browser.find_element_by_xpath('//*[@title="東京"]').click()
-    browser.find_element_by_xpath('//*[@title="神奈川"]').click()
+    browser.find_element_by_xpath(u'//*[@title="茨城"]').click()
+    browser.find_element_by_xpath(u'//*[@title="栃木"]').click()
+    browser.find_element_by_xpath(u'//*[@title="群馬"]').click()
+    browser.find_element_by_xpath(u'//*[@title="埼玉"]').click()
+    browser.find_element_by_xpath(u'//*[@title="千葉"]').click()
+    browser.find_element_by_xpath(u'//*[@title="東京"]').click()
+    browser.find_element_by_xpath(u'//*[@title="神奈川"]').click()
     
     #期間
     browser.find_element_by_id("txtSYear").send_keys("2011")
