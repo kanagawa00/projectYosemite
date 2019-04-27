@@ -1,5 +1,3 @@
-論文データ用のスクリプトなど。
-
 <b>说明</b>
 * BM25calculator.py 
 TF-IDF和BM25计算器
