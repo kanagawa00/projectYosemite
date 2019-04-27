@@ -1,4 +1,3 @@
-# projectYosemite
 論文データ用のスクリプトなど。
 
 <b>说明</b>
