@@ -35,5 +35,5 @@ TF-IDF和BM25计算器
 * YomiuriChecker3.py
 根据指定关键词爬虫读卖新闻数据库，根据指定分期生成各分期文档
 
-* 20190518　Update
+<b>20190518　Update</b>
 一部のファイルをJupiterNotebookのフォーマットでアップロードしました。
